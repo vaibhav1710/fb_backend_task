@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Feed</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <% if (error) { %>
+            <div class="bg-red-500 text-white p-4 m-auto rounded text-center">
+                <p><%= error %></p>
+            </div>
+        <% } else { %>
+            <!-- Logout button (only visible if token is present) -->
+            <% if (token !== undefined && token !== null) { %>
+                <div class="flex justify-end mb-4">
+                    <form action="/logout" method="POST">
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            <% } %>
+
+            <!-- Page title -->
+            <h1 class="text-3xl font-bold text-center mb-8">Our Stores</h1>
+
+            <!-- Grid for QR codes -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <% admins.forEach(admin => { %>
+                    <div class="p-6 bg-white rounded-lg shadow-md text-center">
+                        <!-- Admin name -->
+                        <h2 class="text-xl font-semibold mb-4"><%= admin.name %></h2>
+                        
+                        <!-- QR code image -->
+                        <img src="<%= admin.qrCode %>" alt="QR Code for <%= admin.name %>" class="mx-auto mb-4" style="width: 150px; height: 150px;">
+                        
+                        <!-- Scan QR code message -->
+                        <p class="text-gray-800">Scan the code to fill in your details.</p>
+                        <div class="m-4">
+                            <a href="/admin/<%= admin.id %>/visitors/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold m-2 py-2 px-4 rounded">
+                                See Visitors
+                            </a>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- Button to register new admins -->
+            <% if (!token) { %>
+                <div class="flex justify-center mt-8">
+                    <a href="/register" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Register as New Admin
+                    </a>
+                </div>
+            <% } %>
+        <% } %>
+    </div>
+</body>
+</html>

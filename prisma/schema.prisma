@@ -1,0 +1,39 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model user {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  phoneNumber String  @unique @db.Char(10)  // Enforces a fixed length of 10 characters
+  role       Role
+  qrCode     String?  // QR code for admin (can be NULL for visitors)
+  createdAt  DateTime @default(now())
+
+  // Relationships
+  linkedAdmins   visitorAdminLink[] @relation("VisitorToAdmin")
+  scannedVisitors visitorAdminLink[] @relation("AdminToVisitor")
+
+  @@unique([email, phoneNumber]) // Composite unique constraint
+}
+
+model visitorAdminLink {
+  id        Int      @id @default(autoincrement())
+  visitorId Int
+  adminId   Int
+  scannedAt DateTime @default(now())
+
+  visitor   user @relation("VisitorToAdmin", fields: [visitorId], references: [id], onDelete: Cascade)
+  admin     user @relation("AdminToVisitor", fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  admin
+  visitor
+}

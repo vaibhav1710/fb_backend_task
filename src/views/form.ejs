@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form for Admin</title>
+    <link rel="stylesheet" href="/style.css"> <!-- Optional CSS file -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="p-4 border border-gray-300 rounded-lg shadow-lg mb-4">
+        <h3 class="font-bold text-lg md:text-xl lg:text-2xl mb-2">Store Name: <%= admin.name %></h3>
+        <h4 class="font-bold text-base md:text-lg lg:text-xl text-gray-600">Store Email: <%= admin.email %></h4>
+    </div>
+    
+    <form action="/submit/<%= admin.id %>" method="POST" class="p-4 border border-gray-200 rounded-lg shadow-md bg-white">
+        <input type="hidden" name="adminId" value="<%= admin.id %>"> <!-- Hidden field for admin ID -->
+    
+        <div class="mb-4">
+            <label for="userEmail" class="block text-sm font-medium text-gray-700">Your Email:</label>
+            <input type="email" id="userEmail" name="email" required
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-500"
+                placeholder="Enter your email">
+        </div>
+    
+        <div class="mb-4">
+            <label for="userPhone" class="block text-sm font-medium text-gray-700">Your Phone Number:</label>
+            <input type="text" id="userPhone" name="phoneNumber" required pattern="\d{10}" maxlength="10"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300 focus:border-blue-500"
+                placeholder="Enter your 10-digit phone number">
+        </div>
+    
+        <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow hover:bg-blue-700 transition duration-200">
+            Submit
+        </button>
+    </form>
+</body>
+</html>
